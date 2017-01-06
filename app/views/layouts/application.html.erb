@@ -41,8 +41,16 @@
           <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
               <li class="active"><a href="#">Home</a></li>
-              <li><a href="#about">About</a></li>
+              <li><a href="#about">My Reservations</a></li>
               <li><a href="#contact">Contact</a></li>
+            </ul>
+
+
+            <ul class="nav navbar-nav pull-right">
+              <% if current_user %>
+                <li><a><%= current_user.name %></a></li>
+                <li><%= link_to "Sign Out", destroy_user_session_path, class:"" %></li>
+              <% end %>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -50,12 +58,12 @@
 
       <div class="container">
 
-        <div class="starter-template">
+<!--         <div class="starter-template">
           <h1>Welcome</h1>
           <p class="lead">Start by signing up for the application</p>
           SIGN UP BUTTON LOGIN BUTTON
         </div>
-
+ -->
         <%= yield %>
 
       </div><!-- /.container -->
