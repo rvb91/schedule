@@ -9,6 +9,11 @@
   </div>
 
   <div class="field">
+    <%= f.label :default_type %><br />
+    <%= f.select :default_type, [['Looking for a Nanny', "family"], ['Looking for a Family', "nanny"]] %>
+  </div>
+
+  <div class="field">
     <%= f.label :email %><br />
     <%= f.email_field :email, autofocus: true %>
   </div>

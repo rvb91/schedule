@@ -45,11 +45,10 @@
               <li><a href="#contact">Contact</a></li>
             </ul>
 
-
             <ul class="nav navbar-nav pull-right">
               <% if current_user %>
                 <li><a><%= current_user.name %></a></li>
-                <li><%= link_to "Sign Out", destroy_user_session_path, class:"" %></li>
+                <li><%= link_to "Sign Out", destroy_user_session_path, class:"", method: :delete %></li>
               <% end %>
             </ul>
           </div><!--/.nav-collapse -->
