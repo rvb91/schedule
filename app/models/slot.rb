@@ -1,13 +1,13 @@
 class Slot < ApplicationRecord
 
   # belongs_to :family
-  # belongs_to :nanny
+  belongs_to :nanny
 
   START_BUFFER = 15.minutes
   MINIMUM_DURATION = 30.minutes
 
   validates :start_time, presence: true
-  validates :end_time, presence: true#, numericality: { greater_than:  }
+  validates :end_time, presence: true
 
   validate :cannot_be_in_past, on: :create
   validate :end_must_greater_than_start
