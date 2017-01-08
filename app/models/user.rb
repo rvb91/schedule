@@ -14,6 +14,14 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :rememberable, :trackable, :validatable
 
 
+  def is_nanny?
+    "nanny" == default_type
+  end
+
+  def is_family?
+    "family" == default_type
+  end
+
   private
   def create_nanny_or_family
     case default_type

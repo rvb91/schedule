@@ -37,13 +37,17 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Schedule</a>
+            <a class="navbar-brand" href="<%= root_path %>">Schedule</a>
           </div>
           <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="#about">My Reservations</a></li>
-              <li><a href="#contact">Contact</a></li>
+            <% if current_user && current_user.is_family? %>
+              <li><a href="<%= nannies_path %>">Nannies</a></li>
+            <% end %>
+
+            <% if current_user && current_user.is_nanny? %>
+              <li><a href="<%= slots_controller %>">Slots</a></li>
+            <% end %>
             </ul>
 
             <ul class="nav navbar-nav pull-right">

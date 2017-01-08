@@ -9,8 +9,6 @@ class ApplicationController < ActionController::Base
     end
 
     def after_sign_in_path_for(resource)
-      request.env['omniauth.origin'] || stored_location_for(resource) || root_path
-
       case resource.default_type
       when "nanny"
         # slots_path
