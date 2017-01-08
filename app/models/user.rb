@@ -1,6 +1,7 @@
 class User < ApplicationRecord
 
   has_one :nanny, dependent: :destroy
+  has_one :family, dependent: :destroy
 
   validates :name, presence:true
   validates :default_type, presence:true, inclusion: { in: %w(nanny family) }
@@ -19,7 +20,7 @@ class User < ApplicationRecord
     when "nanny"
       self.create_nanny!
     when "family"
-      # user.create_family
+      self.create_family!
     else
       raise StandardError.new("Attribute default type is not set or invalid")
     end
