@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
 
       case resource.default_type
       when "nanny"
-        slots_path
+        # slots_path
       when "family"
         nannies_path
       end

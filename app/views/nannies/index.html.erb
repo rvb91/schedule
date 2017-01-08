@@ -13,7 +13,7 @@
 
 
 <div class="col-md-12">
-  <h3>Nannies that are available</h3>
+  <h3>Nannies that are free between <%= @start_time.strftime("%b %d - %H:%M") %> and <%= @end_time.strftime("%b %d - %H:%M") %></h3>
   <table class='table table-responsive'>
     <% @nannies.each do |nanny| %>
       <tr>

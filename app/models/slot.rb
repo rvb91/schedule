@@ -1,6 +1,6 @@
 class Slot < ApplicationRecord
 
-  # belongs_to :family
+  belongs_to :family, optional: true
   belongs_to :nanny
 
   START_BUFFER = 15.minutes
@@ -18,6 +18,15 @@ class Slot < ApplicationRecord
 
   def can_reserve?
     family_id.nil?
+  end
+
+  def reserve_for(family)
+    if can_reserve?
+      self.family = family
+      self.save!
+    else
+      raise "slot is already reserved"
+    end
   end
 
   def can_cancel?(user)
@@ -44,8 +53,12 @@ class Slot < ApplicationRecord
 
   def no_overlaps
     return unless self.nanny
-    found_overlaps = self.nanny.slots.where("start_time < ? AND ? < end_time", self.end_time, self.start_time).any?
-    if found_overlaps
+    found_overlaps = self.nanny.slots.where("start_time < ? AND ? < end_time", self.end_time, self.start_time)
+
+    # This is needed to prevent a race condition where it finds itself on subsequent saves.
+    found_overlaps = found_overlaps.where("slots.id != ?", self.id) if self.persisted?
+
+    if found_overlaps.any?
       errors.add(:start_time, "you already have a slot booked in this time period")
     end
   end

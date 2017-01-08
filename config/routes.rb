@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   resources :nannies do
     member do
-      post :reserve
+      patch :reserve
       delete :cancel
     end
   end
