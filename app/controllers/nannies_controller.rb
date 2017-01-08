@@ -20,7 +20,7 @@ class NanniesController < ApplicationController
     nanny = @slot.nanny
 
     if @slot.can_reserve? && @slot.reserve_for(family)
-      redirect_to nannies_path(nanny), notice: "success reserved slot ##{@slot.id}"
+      redirect_to nannies_path(nanny), notice: "successfully reserved slot ##{@slot.id}"
     else
       redirect_to nannies_path(nanny), alert: "slot cannot be reserved"
     end
