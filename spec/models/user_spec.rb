@@ -16,7 +16,7 @@ RSpec.describe User, type: :model do
       }.to change(Nanny, :count).by(1)
     end
 
-    xit "create a Family record when default type is family" do
+    it "create a Family record when default type is family" do
       user.default_type = "family"
       expect {
         user.save!

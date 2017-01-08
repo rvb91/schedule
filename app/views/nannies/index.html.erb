@@ -1,0 +1,27 @@
+<div class="col-md-12">
+  <h3>Filters</h3>
+  <%= form_tag("/nannies", method: :get) do %>
+  <%= label_tag "Start Date" %>
+  <%= select_datetime @start_time, prefix:"start_time" %>
+  <br>
+  <%= label_tag "End Date" %>
+  <%= select_datetime @end_time, prefix:"end_time" %>
+  <br>
+  <%= submit_tag "Filter", class: "btn btn-primary" %>
+  <% end %>
+</div>
+
+
+<div class="col-md-12">
+  <h3>Nannies that are available</h3>
+  <table class='table table-responsive'>
+    <% @nannies.each do |nanny| %>
+      <tr>
+        <td><%= nanny.name %></td>
+        <td><%= link_to "View Slots", nanny_path(nanny) %></td>
+      </tr>
+
+    <% end %>
+  </table>
+
+</div>

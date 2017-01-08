@@ -2,9 +2,11 @@ require 'rails_helper'
 
 RSpec.describe Slot, type: :model do
   describe "validations" do
+    let(:user) { User.create(name: FFaker::Name.name, email: rand(1000).to_s+FFaker::Internet.email, password: "password", password_confirmation:"password", default_type:"nanny") }
+    let(:nanny) { user.create_nanny! }
     context "start_time" do
       it "cannot be less than Time.now (ie - in the past)" do
-        slot = Slot.new(start_time: Time.now - 3.days, end_time: Time.now - 1.days )
+        slot = Slot.new(nanny:nanny, start_time: Time.now - 3.days, end_time: Time.now - 1.days )
         expect(slot.valid?).to eq(false)
         expect(slot.errors[:start_time].empty?).to eq(false)
       end
@@ -12,7 +14,7 @@ RSpec.describe Slot, type: :model do
       it "should be greater than Time.now + START BUFFER" do
         start = Time.now + Slot::START_BUFFER - 5.minutes
         endt = Time.now + 1.days
-        slot = Slot.new(start_time: start , end_time: endt)
+        slot = Slot.new(start_time: start , end_time: endt, nanny: nanny)
 
         expect(slot.valid?).to eq(false)
         expect(slot.errors[:start_time].empty?).to eq(false)
@@ -23,11 +25,45 @@ RSpec.describe Slot, type: :model do
       it "should be greater than start time" do
         start = Time.now + Slot::START_BUFFER + 5.minutes
         endt = start - 3.minutes
-        slot = Slot.new(start_time: start , end_time: endt)
+        slot = Slot.new(start_time: start , end_time: endt, nanny: nanny)
 
         expect(slot.valid?).to eq(false)
         expect(slot.errors[:end_time].empty?).to eq(false)
       end
+    end
+
+    context "overlaping slots" do
+      let(:slot_1) { Slot.create!(nanny: nanny, start_time: 3.days.from_now, end_time: 6.days.from_now) }
+
+      # Assume that END > START for all tests below.
+      # Hence condtion must be checked prior to this test.
+      it "END2 > START1" do
+        slot_1
+        slot_2 = Slot.new(nanny: nanny, start_time: 4.days.from_now, end_time: 10.days.from_now)
+        expect(slot_2.valid?).to eq(false)
+        expect(slot_2.errors[:start_time]).to eq(["you already have a slot booked in this time period"])
+      end
+
+      it "START2 < START1 AND END2 < END1" do
+        slot_1
+        slot_2 = Slot.new(nanny: nanny, start_time: 4.days.from_now, end_time: 5.days.from_now)
+        expect(slot_2.valid?).to eq(false)
+        expect(slot_2.errors[:start_time]).to eq(["you already have a slot booked in this time period"])
+      end
+
+      it "START2 < END1" do
+        slot_1
+        slot_2 = Slot.new(nanny: nanny, start_time: 1.days.from_now, end_time: 5.days.from_now)
+        expect(slot_2.valid?).to eq(false)
+        expect(slot_2.errors[:start_time]).to eq(["you already have a slot booked in this time period"])
+      end
+
+      it "be valid when the slots dont overlap" do
+        slot_1
+        slot_2 = Slot.new(nanny: nanny, start_time: 10.days.from_now, end_time: 15.days.from_now)
+        expect(slot_2.valid?).to eq(true)
+      end
+
     end
   end
 

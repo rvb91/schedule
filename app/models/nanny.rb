@@ -3,4 +3,8 @@ class Nanny < ApplicationRecord
   has_many :slots, dependent: :destroy
 
   validates :user_id, presence: true
+
+  def name
+    user.name
+  end
 end

@@ -9,8 +9,20 @@ class Slot < ApplicationRecord
   validates :start_time, presence: true
   validates :end_time, presence: true
 
+  # The ordering of these validations is important
   validate :cannot_be_in_past, on: :create
   validate :end_must_greater_than_start
+  validate :no_overlaps
+
+   scope :reserveable, -> { where(family_id: nil) }
+
+  def can_reserve?
+    family_id.nil?
+  end
+
+  def can_cancel?(user)
+    family.id == user.family.id
+  end
 
   def cannot_be_in_past
     return unless start_time
@@ -30,8 +42,17 @@ class Slot < ApplicationRecord
     end
   end
 
+  def no_overlaps
+    return unless self.nanny
+    found_overlaps = self.nanny.slots.where("start_time < ? AND ? < end_time", self.end_time, self.start_time).any?
+    if found_overlaps
+      errors.add(:start_time, "you already have a slot booked in this time period")
+    end
+  end
+
   def can_change_start_time?
     !family_id.present?
   end
+
 
 end
