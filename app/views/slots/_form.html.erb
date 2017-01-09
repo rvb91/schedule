@@ -14,12 +14,12 @@
 
   <div class="field">
     <%= f.label :start_time %>
-    <%= f.datetime_select :start_time %>
+    <%= f.datetime_select :start_time, start_year: 2017, end_year: 2017 %>
   </div>
 
   <div class="field">
     <%= f.label :end_time %>
-    <%= f.datetime_select :end_time %>
+    <%= f.datetime_select :end_time, start_year: 2017, end_year: 2017 %>
   </div>
 
   <div class="actions">

@@ -2,10 +2,10 @@
   <h3>Filters</h3>
   <%= form_tag("/nannies", method: :get) do %>
   <%= label_tag "Start Date" %>
-  <%= select_datetime @start_time, prefix:"start_time" %>
+  <%= select_datetime @start_time, prefix:"start_time", minute_step: 15, start_year: 2017, end_year: 2017 %>
   <br>
   <%= label_tag "End Date" %>
-  <%= select_datetime @end_time, prefix:"end_time" %>
+  <%= select_datetime @end_time, prefix:"end_time", minute_step: 15 %>
   <br>
   <%= submit_tag "Filter", class: "btn btn-primary" %>
   <% end %>
@@ -15,13 +15,31 @@
 <div class="col-md-12">
   <h3>Nannies that are free between <%= @start_time.strftime("%b %d - %H:%M") %> and <%= @end_time.strftime("%b %d - %H:%M") %></h3>
   <table class='table table-responsive'>
-    <% @nannies.each do |nanny| %>
+    <thead>
       <tr>
-        <td><%= nanny.name %></td>
-        <td><%= link_to "View Slots", nanny_path(nanny) %></td>
+        <th>Name</th>
+        <th>Available Slots</th>
+        <th></th>
       </tr>
+    </thead>
 
-    <% end %>
+    <tbody>
+      <% @nannies.each do |nanny| %>
+        <tr>
+          <td><%= nanny.name %></td>
+          <td>
+            <% nanny.slots.each do |s| %>
+              <div>
+                <%= format_time(s.start_time)  %> - <%= format_time(s.end_time) %> |
+                <%= link_to "Reserve", reserve_nanny_path(s), method: :patch %>
+              </div>
+            <% end %>
+          </td>
+          <td><%= link_to "View All", nanny_path(nanny) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+
   </table>
 
 </div>
