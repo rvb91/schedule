@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
     def after_sign_in_path_for(resource)
       case resource.default_type
       when "nanny"
-        # slots_path
+        slots_path
       when "family"
         nannies_path
       end

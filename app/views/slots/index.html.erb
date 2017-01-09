@@ -1,0 +1,40 @@
+<div class="col-md-12">
+  <p id="notice"><%= notice %></p>
+
+  <h1>Slots</h1>
+
+  <table class='table'>
+    <thead>
+      <tr>
+        <th>Start time</th>
+        <th>End time</th>
+        <th>Reserved By</th>
+        <th colspan="3"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @slots.each do |slot| %>
+        <tr>
+          <td><%= format_time(slot.start_time) %></td>
+          <td><%= format_time(slot.end_time) %></td>
+          <td><%= slot.family.try(:name) %></td>
+          <td><%= link_to 'Modify', edit_slot_path(slot) %></td>
+          <td><%= link_to 'Delete', slot, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <% if @slots.empty? %>
+    <div class="starter-template">
+      <h1>Welcome</h1>
+      <p class="lead">Start by creating a slot</p>
+    </div>
+  <% end %>
+
+  <br>
+
+  <%= link_to 'New Slot', new_slot_path, class:"btn btn-primary" %>
+
+</div>

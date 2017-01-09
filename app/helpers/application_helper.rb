@@ -15,4 +15,8 @@ module ApplicationHelper
     nil
   end
 
+  def format_time(datetime)
+    datetime.strftime("%b %d - %H:%M")
+  end
+
 end

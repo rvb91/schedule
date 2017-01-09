@@ -100,4 +100,22 @@ RSpec.describe Slot, type: :model do
         }.to raise_error(StandardError)
     end
   end
+
+  describe "#can_cancel" do
+    let(:slot) {Slot.create!(start_time: 3.days.from_now, end_time: 5.days.from_now, nanny: nanny)}
+
+    it "false when its already reserved by a family" do
+      slot.update(family: family)
+      expect(slot.can_cancel?(nanny)).to eq(false)
+    end
+
+    it "true when it has not been reserved by a family" do
+      expect(slot.can_cancel?(nanny)).to eq(true)
+    end
+
+    it "true when family is same as reserving family" do
+      slot.update(family: family)
+      expect(slot.can_cancel?(family)).to eq(true)
+    end
+  end
 end

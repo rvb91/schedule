@@ -1,0 +1,17 @@
+<div class='col-md-12'>
+  <h1>New Slot</h1>
+
+  <br>
+  <section>
+    <h4>A few things to keep in mind</h4>
+      <li>Slots must start a minimum of 15 minutes from now.</li>
+      <li>They should be a minimum of 30 minutes.</li>
+      <li>You cant have 2 overlapping slots.</li>
+  </section>
+
+  <br>
+  <%= render 'form', slot: @slot %>
+
+  <%= link_to 'Back', slots_path %>
+
+</div>

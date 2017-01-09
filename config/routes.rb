@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :slots
   root to: "demo#index"
   devise_for :users
 

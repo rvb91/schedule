@@ -29,8 +29,13 @@ class Slot < ApplicationRecord
     end
   end
 
-  def can_cancel?(user)
-    family.id == user.family.id
+  def can_cancel?(resource)
+    case resource
+    when Family then family.id == resource.id
+    when Nanny then resource.id == nanny_id && family_id.nil?
+    else
+      false
+    end
   end
 
   def cannot_be_in_past
@@ -47,7 +52,7 @@ class Slot < ApplicationRecord
   def end_must_greater_than_start
     return unless start_time && end_time
     if end_time < (start_time + MINIMUM_DURATION)
-      errors.add(:end_time, "must be greater than start time")
+      errors.add(:end_time, "must be a minimum of 30 minutes more than start time")
     end
   end
 

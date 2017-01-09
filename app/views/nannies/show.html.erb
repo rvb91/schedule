@@ -13,8 +13,8 @@
 
     <% @nanny.slots.reserveable.each do |slot| %>
       <tr>
-        <td><%= slot.start_time.strftime("%b %d - %H:%M") %></td>
-        <td><%= slot.end_time.strftime("%b %d - %H:%M") %></td>
+        <td><%= format_time(slot.start_time) %></td>
+        <td><%= format_time(slot.end_time) %></td>
         <td><%= link_to "Reserve", reserve_nanny_path(slot), method: :patch, class: "btn btn-primary" %></td>
       </tr>
     <% end %>
