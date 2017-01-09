@@ -15,6 +15,7 @@ class SlotsController < ApplicationController
   end
 
   def edit
+    return slots_path, notice: "This slot has been reserved and cannot be changed" unless @slot.can_edit?(current_user.nanny)
   end
 
   def create
@@ -31,21 +32,19 @@ class SlotsController < ApplicationController
   end
 
   def update
-    respond_to do |format|
+    if @slot.can_edit?(current_user.nanny)
       if @slot.update(slot_params)
-        format.html { redirect_to @slot, notice: 'Slot was successfully updated.' }
-      else
-        format.html { render :edit }
+        return redirect_to @slot, notice: 'Slot was successfully updated.'
       end
+    else
+      flash[:error] = "Slot has been reserved and cannot be changed"
     end
+    return render :edit
   end
 
   def destroy
-    if @slot.can_cancel?(current_user.nanny)
-      @slot.destroy
-      respond_to do |format|
-        format.html { redirect_to slots_url, notice: 'Slot was successfully deleted.' }
-      end
+    if @slot.can_cancel?(current_user.nanny) && @slot.destroy
+      redirect_to slots_url, notice: 'Slot was successfully deleted.'
     else
       redirect_to slots_path, alert: "You cannot delete a slot that has been reserved"
     end

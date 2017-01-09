@@ -38,6 +38,10 @@ class Slot < ApplicationRecord
     end
   end
 
+  def can_edit?(resource)
+    can_cancel?(resource)
+  end
+
   def cannot_be_in_past
     return unless start_time
     if start_time < Time.now

@@ -52,9 +52,8 @@
 
             <ul class="nav navbar-nav pull-right">
               <% if current_user %>
-                <li><a><%= current_user.name %></a></li>
+                <li><%= link_to current_user.name, edit_user_registration_path %></li>
                 <li><%= link_to "Sign Out", destroy_user_session_path, method: :delete %></li>
-                <li><%= link_to "EDIT REG", edit_user_registration_path %></li>
               <% end %>
             </ul>
           </div><!--/.nav-collapse -->

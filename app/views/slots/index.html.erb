@@ -19,8 +19,8 @@
           <td><%= format_time(slot.start_time) %></td>
           <td><%= format_time(slot.end_time) %></td>
           <td><%= slot.family.try(:name) %></td>
-          <td><%= link_to 'Modify', edit_slot_path(slot) %></td>
-          <td><%= link_to 'Delete', slot, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <td><%= link_to 'Modify', edit_slot_path(slot) if slot.can_edit?(current_user.nanny) %></td>
+          <td><%= link_to 'Delete', slot, method: :delete, data: { confirm: 'Are you sure?' } if slot.can_cancel?(current_user.nanny) %></td>
         </tr>
       <% end %>
     </tbody>
